@@ -5,7 +5,7 @@ package Mail::Sendmail;
 
 =head1 NAME
 
-Mail::Sendmail v. 0.79_16 - Simple platform independent mailer
+Mail::Sendmail - Simple platform independent mailer
 
 =cut
 
