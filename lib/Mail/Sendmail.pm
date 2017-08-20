@@ -999,10 +999,6 @@ See the F<Changes> file for the full history. If you don't have it
 because you installed through PPM, you can also find the latest
 one on F<http://alma.ch/perl/scripts/Sendmail/Changes>.
 
-=head1 AUTHOR
-
-Milivoj Ivkovic <mi\x40alma.ch> ("\x40" is "@" of course)
-
 =head1 NOTES
 
 MIME::QuotedPrint is used by default on every message if available. It
@@ -1025,5 +1021,15 @@ in answering mail. I intend to set up a mailing list soon.
 
 Last revision: 06.02.2003. Latest version should be available on
 CPAN: F<http://www.cpan.org/modules/by-authors/id/M/MI/MIVKOVIC/>.
+
+=head1 AUTHOR
+
+Milivoj Ivkovic <mi\x40alma.ch> ("\x40" is "@" of course)
+
+=head1 COPYRIGHT
+
+Copyright (c) 1998-2017 Milivoj Ivkovic.  All rights reserved.
+This program is free software; you can redistribute it and/or
+modify it under the same terms as Perl itself.
 
 =cut
