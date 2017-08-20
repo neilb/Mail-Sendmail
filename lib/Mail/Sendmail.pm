@@ -1,4 +1,5 @@
 package Mail::Sendmail;
+
 # Mail::Sendmail by Milivoj Ivkovic <mi\x40alma.ch>
 # see embedded POD documentation after __END__
 # or http://alma.ch/perl/mail.html
@@ -9,13 +10,20 @@ Mail::Sendmail - Simple platform independent mailer
 
 =cut
 
-$VERSION = substr q$Revision: 0.79_16 $, 10;
+require 5.006;
+
+our $VERSION = "0.80";
+
+use strict;
+use warnings;
+
+use parent 'Exporter';
 
 # *************** Configuration you may want to change *******************
 # You probably want to set your SMTP server here (unless you specify it in
 # every script), and leave the rest as is. See pod documentation for details
 
-%mailcfg = (
+our %mailcfg = (
     # List of SMTP servers:
     'smtp'    => [ qw( localhost ) ],
     #'smtp'    => [ qw( mail.mydomain.com ) ], # example
@@ -34,22 +42,13 @@ $VERSION = substr q$Revision: 0.79_16 $, 10;
 
 # *******************************************************************
 
-require Exporter;
-use strict;
-use vars qw(
-            $VERSION
-            @ISA
-            @EXPORT
-            @EXPORT_OK
-            %mailcfg
-            $address_rx
-            $debug
-            $log
-            $error
-            $retry_delay
-            $connect_retries
-            $auth_support
-           );
+our $address_rx;
+our $debug;
+our $log;
+our $error;
+our $retry_delay;
+our $connect_retries;
+our $auth_support;
 
 use Socket;
 use Time::Local; # for automatic time zone detection
@@ -63,16 +62,15 @@ $auth_support = 'DIGEST-MD5 CRAM-MD5 PLAIN LOGIN';
 eval("use MIME::QuotedPrint");
 $mailcfg{'mime'} &&= (!$@);
 
-@ISA        = qw(Exporter);
-@EXPORT     = qw(&sendmail);
-@EXPORT_OK  = qw(
-                 %mailcfg
-                 time_to_date
-                 $address_rx
-                 $debug
-                 $log
-                 $error
-                );
+our @EXPORT     = qw(&sendmail);
+our @EXPORT_OK  = qw(
+                     %mailcfg
+                     time_to_date
+                     $address_rx
+                     $debug
+                     $log
+                     $error
+                    );
 
 # regex for e-mail addresses where full=$1, user=$2, domain=$3
 # see pod documentation about this regex
@@ -271,14 +269,15 @@ sub sendmail {
     my $auth = $mail{'Auth'};
     delete $mail{'Auth'};
 
-
-    {    # don't warn for undefined values below
-        local $^W = 0;
-        $mail{'Message'} = join("", $mail{'Message'}, $mail{'Body'}, $mail{'Text'});
-    }
+    my @parts;
+    push(@parts, $mail{'Message'}) if defined($mail{'Message'});
+    push(@parts, $mail{'Body'})    if defined($mail{'Body'});
+    push(@parts, $mail{'Text'})    if defined($mail{'Text'});
+    $mail{'Message'} = join("", @parts);
 
     # delete @mail{'Body', 'Text'};
-    delete $mail{'Body'}; delete $mail{'Text'};
+    delete $mail{'Body'};
+    delete $mail{'Text'};
 
     # Extract 'From:' e-mail address to use as envelope sender
 
@@ -322,8 +321,11 @@ sub sendmail {
 
     # Get recipients
     {    # don't warn for undefined values below
-        local $^W = 0;
-        $recip = join(", ", $mail{To}, $mail{Cc}, $mail{Bcc});
+        my @recipients;
+        push(@recipients, $mail{To})  if defined($mail{To});
+        push(@recipients, $mail{Cc})  if defined($mail{Cc});
+        push(@recipients, $mail{Bcc}) if defined($mail{Bcc});
+        $recip = join(", ", @recipients);
     }
 
     delete $mail{'Bcc'};
