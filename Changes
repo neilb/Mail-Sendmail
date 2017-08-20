@@ -6,6 +6,7 @@ Revision history for Perl module Mail::Sendmail
     - Added COPYRIGHT section to pod.
     - Fixed the NAME section in pod to follow expected format.
     - Added "use warnings" and fixed all the warnings.
+    - Manually set $VERSION, as it's used in the code
 
 0.79_16 2006-07-08 MIVKOVIC
     - experimental SMTP AUTH support (LOGIN PLAIN CRAM-MD5 DIGEST-MD5)
