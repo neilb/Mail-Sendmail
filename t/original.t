@@ -48,7 +48,7 @@ if ($server) {
 $mail{Subject} = "Mail::Sendmail version $Mail::Sendmail::VERSION test";
 
 $mail{Message} = "This is a test message sent with Perl version $] from a $^O system.\n\n";
-$mail{Message} .= "It contains an accented letter: à (a grave).\n";
+$mail{Message} .= "It contains an accented letter: Ã  (a grave).\n";
 $mail{Message} .= "It was sent on " . Mail::Sendmail::time_to_date() . "\n";
 
 # Go send it
