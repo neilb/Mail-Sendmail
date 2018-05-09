@@ -1,9 +1,14 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+use Test::More tests => 2;
 
 # unattended Mail::Sendmail test, sends a message to the author
 # but you probably want to change $mail{To} below
 # to send the message to yourself.
-# version 0.78
+
+my (%mail, $server);
 
 # if you change your mail server, you may need to change the From:
 # address below.
@@ -16,14 +21,16 @@ $mail{To}   = 'Sendmail Test <sendmail@alma.ch>';
 # own server here, by name or IP address
 $server = 'mail.alma.ch';
 #$server = 'my.usual.mail.server';
-
-BEGIN { $| = 1; print "1..2\n"; }
-END {print "not ok 1\n" unless $loaded;}
+#
+BEGIN { use_ok ('Mail::Sendmail'); };
+SKIP: {
+skip "Network testing prohibited", 1 if $ENV{NO_NETWORK_TESTING};
 
 print <<EOT
 Test Mail::Sendmail $Mail::Sendmail::VERSION
 
-Trying to send a message to the author (and/or whoever if you edited test.pl)
+Trying to send a message to the author (and/or whomever if you edited
+t/original.t)
 
 (The test is designed so it can be run by Test::Harness from CPAN.pm.
 Edit it to send the mail to yourself for more concrete feedback. If you
@@ -35,14 +42,10 @@ Current recipient(s): '$mail{To}'
 EOT
 ;
 
-use Mail::Sendmail;
-
-$loaded = 1;
-print "ok 1\n";
 
 if ($server) {
     $mail{Smtp} = $server;
-    print "Server set to: $server\n";
+    diag "Server set to: $server\n";
 }
 
 $mail{Subject} = "Mail::Sendmail version $Mail::Sendmail::VERSION test";
@@ -50,18 +53,20 @@ $mail{Subject} = "Mail::Sendmail version $Mail::Sendmail::VERSION test";
 $mail{Message} = "This is a test message sent with Perl version $] from a $^O system.\n\n";
 $mail{Message} .= "It contains an accented letter: à (a grave).\n";
 $mail{Message} .= "It was sent on " . Mail::Sendmail::time_to_date() . "\n";
+$mail{'Content-Type'} = 'text/plain; charset="utf-8"';
 
 # Go send it
 print "Sending...\n";
 
-if (sendmail %mail) {
+ok (my $res = sendmail %mail);
+if ($res) {
     print "content of \$Mail::Sendmail::log:\n$Mail::Sendmail::log\n";
     if ($Mail::Sendmail::error) {
-        print "content of \$Mail::Sendmail::error:\n$Mail::Sendmail::error\n";
+        diag "content of \$Mail::Sendmail::error:\n$Mail::Sendmail::error\n";
     }
-    print "ok 2\n";
 }
 else {
-    print "\n!Error sending mail:\n$Mail::Sendmail::error\n";
-    print "not ok 2\n";
+    diag "!Error sending mail:\n$Mail::Sendmail::error\n";
+    diag "Content of \$Mail::Sendmail::log:\n$Mail::Sendmail::log\n";
 }
+} # END OF SKIP
