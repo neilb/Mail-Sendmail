@@ -184,7 +184,7 @@ sub sendmail {
         $error .= join(" ", @_) . "\n";
         if ($server_reply) {
             $error .= "Server said: $server_reply\n";
-            print STDERR "Server said: $server_reply\n" if $^W;
+            warn "Server said: $server_reply\n" if $^W;
         }
         close S;
         return 0;
@@ -197,10 +197,10 @@ sub sendmail {
             my $data = ref($_[$i]) ? $_[$i] : \$_[$i];
             if ($mailcfg{'debug'} > 5) {
                 if (length($$data) < 500) {
-                    print ">", $$data;
+                    warn ">", $$data;
                 }
                 else {
-                    print "> [...", length($$data), " bytes sent ...]\n";
+                    warn "> [...", length($$data), " bytes sent ...]\n";
                 }
             }
             print(S $$data) || return 0;
@@ -214,7 +214,7 @@ sub sendmail {
             $_ = <S>;
             $server_reply .= $_;
             #chomp $_;
-            print "<$_" if $mailcfg{'debug'} > 5;
+            warn "<$_" if $mailcfg{'debug'} > 5;
             if (/^[45]/ or !$_) {
                 chomp $server_reply;
                 return; # return false
@@ -348,7 +348,7 @@ sub sendmail {
             return fail("socket failed ($!)")
         }
 
-        print "- trying $server\n" if $mailcfg{'debug'} > 1;
+        warn "- trying $server\n" if $mailcfg{'debug'} > 1;
 
         $server =~ s/\s+//go; # remove spaces just in case of a typo
         # extract port if server name like "mail.domain.com:2525"
@@ -367,18 +367,18 @@ sub sendmail {
               ) {
             $retried++;
             $error .= "connect to $server failed ($!)\n";
-            print "- connect to $server failed ($!)\n" if $mailcfg{'debug'} > 1;
-            print "retrying in $mailcfg{'delay'} seconds...\n" if $mailcfg{'debug'} > 1;
+            warn "- connect to $server failed ($!)\n",
+                "retrying in $mailcfg{'delay'} seconds...\n" if $mailcfg{'debug'} > 1;
             sleep $mailcfg{'delay'};
         }
 
         if ( $connected ) {
-            print "- connected to $server\n" if $mailcfg{'debug'} > 3;
+            warn "- connected to $server\n" if $mailcfg{'debug'} > 3;
             last;
         }
         else {
             $error .= "connect to $server failed\n";
-            print "- connect to $server failed, next server...\n" if $mailcfg{'debug'} > 1;
+            warn "- connect to $server failed, next server...\n" if $mailcfg{'debug'} > 1;
             next; # next server
         }
     }
@@ -434,7 +434,7 @@ sub sendmail {
             my $method = uc $methods[0];
             _require_base64() || fail("Could not use MIME::Base64 module required for authentication");
             if ($method eq "LOGIN") {
-                print STDERR "Trying AUTH LOGIN\n" if ($mailcfg{debug} > 9);
+                warn "Trying AUTH LOGIN\n" if ($mailcfg{debug} > 9);
                 socket_write("AUTH LOGIN$CRLF")
                     || return fail("send AUTH LOGIN failed (lost connection?)");
                 socket_read()
