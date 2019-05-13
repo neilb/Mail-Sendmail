@@ -545,7 +545,7 @@ sub sendmail {
             || return fail("send $header: error");
     };
 
-    #- test diconnecting from network here, to see what happens
+    #- test disconnecting from network here, to see what happens
     #- print STDERR "DISCONNECT NOW!\n";
     #- sleep 4;
     #- print STDERR "trying to continue, expecting an error... \n";
@@ -1018,8 +1018,9 @@ terrible things will happen to you if you use it badly, like for sending
 spam, or ...?)
 
 Thanks to the many users who sent me feedback, bug reports, suggestions, etc.
-And please excuse me if I forgot to answer your mail. I am not always reliabe
-in answering mail. I intend to set up a mailing list soon.
+And please excuse me if I forgot to answer your mail.
+I am not always reliable in answering mail.
+I intend to set up a mailing list soon.
 
 Last revision: 06.02.2003. Latest version should be available on
 CPAN: F<http://www.cpan.org/modules/by-authors/id/M/MI/MIVKOVIC/>.
