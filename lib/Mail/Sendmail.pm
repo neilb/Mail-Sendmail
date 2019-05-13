@@ -757,7 +757,7 @@ $mail{server}='my.smtp.server:2525' will try to connect to port 2525 on server m
 
 =item $mail{auth}
 
-This must be a reference to a hash containg all your authentication options:
+This must be a reference to a hash containing all your authentication options:
 
 $mail{auth} = \%options;
 or
@@ -967,7 +967,7 @@ from your scripts.
 
 
   $mail{Smtp} = 'special_server.for-this-message-only.domain.com';
-  $mail{'X-custom'} = 'My custom additionnal header';
+  $mail{'X-custom'} = 'My custom additional header';
   $mail{'mESSaGE : '} = "The message key looks terrible, but works.";
   # cheat on the date:
   $mail{Date} = Mail::Sendmail::time_to_date( time() - 86400 );
