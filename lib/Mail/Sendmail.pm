@@ -1018,9 +1018,6 @@ terrible things will happen to you if you use it badly, like for sending
 spam, or ...?)
 
 Thanks to the many users who sent me feedback, bug reports, suggestions, etc.
-And please excuse me if I forgot to answer your mail.
-I am not always reliable in answering mail.
-I intend to set up a mailing list soon.
 
 Last revision: 06.02.2003. Latest version should be available on
 CPAN: F<http://www.cpan.org/modules/by-authors/id/M/MI/MIVKOVIC/>.
