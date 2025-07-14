@@ -53,6 +53,7 @@ our $auth_support;
 use Socket;
 use Time::Local; # for automatic time zone detection
 use Sys::Hostname; # for use of hostname in HELO
+use Sys::Hostname::Long; # for use of hostname in HELO
 
 #use Digest::HMAC_MD5 qw(hmac_md5 hmac_md5_hex);
 
@@ -339,7 +340,7 @@ sub sendmail {
     }
 
     # get local hostname for polite HELO
-    $localhost = hostname() || 'localhost';
+    $localhost = hostname_long() || hostname() || 'localhost';
 
     foreach $server ( @{$mailcfg{'smtp'}} ) {
         # open socket needs to be inside this foreach loop on Linux,
