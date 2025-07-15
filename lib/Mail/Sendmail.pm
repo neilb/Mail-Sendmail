@@ -12,7 +12,7 @@ Mail::Sendmail - Simple platform independent mailer
 
 require 5.006;
 
-our $VERSION = "0.80";
+our $VERSION = "0.82";
 
 use strict;
 use warnings;
