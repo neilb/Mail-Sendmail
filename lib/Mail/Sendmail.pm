@@ -10,6 +10,8 @@ Mail::Sendmail - Simple platform independent mailer
 
 =cut
 
+our $VERSION = "0.83";
+
 require 5.006;
 
 use strict;
